@@ -7,23 +7,21 @@ class Solution {
         int n2=nums2.length;
         int l=0;
         int h=0;
-        int i = 0, j = 0;
-
-        // Merge the two arrays
-        while (i < n1 && j < n2) {
-            if (nums1[i] < nums2[j]) {
-                arr[idx++] = nums1[i++];
-            } else {
-                arr[idx++] = nums2[j++];
+        while(l<n1 && h<n2){
+            if(nums1[l]<nums2[h]){
+                arr[idx++]=nums1[l];
+                l++;
+            }
+            else{
+                arr[idx++]=nums2[h];
+                h++;
             }
         }
-        while (i < n1) {
-            arr[idx++] = nums1[i++];
+        while(l<n1){
+            arr[idx++]=nums1[l++];
         }
-
-        // Add remaining elements from nums2
-        while (j < n2) {
-            arr[idx++] = nums2[j++];
+        while(h<n2){
+            arr[idx++]=nums2[h++];
         }
         if((n1+n2)%2==0){
             int s=(n1+n2)/2;
