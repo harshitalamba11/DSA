@@ -1,6 +1,6 @@
 class Solution {
     public int numTrees(int n) {
-        //memoization may be
+        //using the Catalan number
         if(n<2) return 1;
         int[] sol=new int[n+1];
         sol[0]=1;
