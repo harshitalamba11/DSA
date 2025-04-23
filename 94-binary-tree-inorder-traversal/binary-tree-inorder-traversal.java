@@ -14,6 +14,30 @@
  * }
  */
 class Solution {
+    // MORRIS TRAVERSAL...
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        TreeNode node=root;
+        while(node!=null){
+            if(node.left==null){
+                res.add(node.val);
+                node=node.right;
+            }
+            else{
+                TreeNode leftChild=node.left;
+                while(leftChild.right!=null){
+                    leftChild=leftChild.right;
+                }
+                leftChild.right=node;
+                TreeNode temp=node;
+                node=node.left;
+                temp.left=null;
+            }
+        }
+        return res;
+    }
+    
+    /*
     public List<Integer> inorderTraversal(TreeNode root) {
         Stack<TreeNode> s=new Stack<>();
         List<Integer> res=new ArrayList<>();
@@ -39,7 +63,9 @@ class Solution {
         }
 
         return res;
+        
     }
+    */
 }
 
 
