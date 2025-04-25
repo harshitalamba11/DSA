@@ -14,76 +14,36 @@
  * }
  */
 class Solution {
-    // MORRIS TRAVERSAL...
     public List<Integer> inorderTraversal(TreeNode root) {
-        List<Integer> res=new ArrayList<>();
-        TreeNode node=root;
-        while(node!=null){
-            if(node.left==null){
-                res.add(node.val);
-                node=node.right;
+        List<Integer> res = new ArrayList<>();
+    TreeNode curr = root;
+
+    while (curr != null) {
+        if (curr.left == null) {
+            res.add(curr.val);  // Visit current
+            curr = curr.right;  // Move to right
+        } else {
+            TreeNode predecessor = curr.left;
+
+            // Find the rightmost node in left subtree or
+            // a node that already points to current
+            while (predecessor.right != null && predecessor.right != curr) {
+                predecessor = predecessor.right;
             }
-            else{
-                TreeNode leftChild=node.left;
-                while(leftChild.right!=null){
-                    leftChild=leftChild.right;
-                }
-                leftChild.right=node;
-                TreeNode temp=node;
-                node=node.left;
-                temp.left=null;
+
+            if (predecessor.right == null) {
+                // Create thread and move to left child
+                predecessor.right = curr;
+                curr = curr.left;
+            } else {
+                // Thread already exists - restore tree and visit node
+                predecessor.right = null;
+                res.add(curr.val);
+                curr = curr.right;
             }
         }
-        return res;
     }
-    
-    /*
-    public List<Integer> inorderTraversal(TreeNode root) {
-        Stack<TreeNode> s=new Stack<>();
-        List<Integer> res=new ArrayList<>();
-        TreeNode node=root;
-        while (true) {
-            // Traverse to the leftmost node
-            while (node != null) {
-                s.push(node);
-                node = node.left;
-            }
 
-            // If the stack is empty, we are done
-            if (s.isEmpty()) {
-                break;
-            }
-
-            // Process the node
-            TreeNode n = s.pop();
-            res.add(n.val);
-
-            // Move to the right subtree
-            node = n.right; // Update node to the right child
-        }
-
-        return res;
-        
-    }
-    */
-}
-
-
-
-
-/*
-
-class Solution {
-    public void helper(TreeNode root,List<Integer> res){
-        if(root==null) return;
-        helper(root.left,res);
-        res.add(root.val);
-        helper(root.right,res);
-    }
-    public List<Integer> inorderTraversal(TreeNode root) {
-        List<Integer> res=new ArrayList<>();
-        helper(root,res);
-        return res;
+    return res;
     }
 }
-*/
