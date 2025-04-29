@@ -13,6 +13,10 @@
  *     }
  * }
  */
+
+
+ //basically in this approach : hum reverse of postorder follow karte hai postorder banane keh liye...
+ //say in this we started with back of right then, left , then root to make it as left right root that is why this is post order strategy...
 class Solution {
     public TreeNode prev=null;
     public void flatten(TreeNode root) {
