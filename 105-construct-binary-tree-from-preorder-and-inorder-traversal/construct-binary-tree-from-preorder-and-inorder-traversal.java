@@ -14,28 +14,19 @@
  * }
  */
 class Solution {
-    //root is rootidx
-    public TreeNode helper(int[] preorder,int[] inorder,Map<Integer,Integer> map,int rootidx,int left,int right){
-        if (left > right) {
-            return null; // If no nodes to process, return null
-        }
-
-        TreeNode root = new TreeNode(preorder[rootidx]);
+    public TreeNode binary(int[] preorder,HashMap<Integer,Integer> map,int rootidx,int left,int right){
+        if(left>right) return null;
+        TreeNode root=new TreeNode(preorder[rootidx]);
         int mid = map.get(preorder[rootidx]);
-        
-        // Left subtree: Increase rootidx by 1 as we move to the next node in preorder
-        root.left = helper(preorder, inorder, map, rootidx + 1, left, mid - 1);
-        
-        // Right subtree: rootidx is incremented by the number of nodes in the left subtree
-        root.right = helper(preorder, inorder, map, rootidx + (mid - left + 1), mid + 1, right);
-        
+        root.left=binary(preorder,map,rootidx+1,left,mid-1);
+        root.right=binary(preorder,map,rootidx+(mid-left+1),mid+1,right);
         return root;
     }
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        Map<Integer,Integer> map=new HashMap<>();
+        HashMap<Integer,Integer> map=new HashMap<>();
         for(int i=0;i<inorder.length;i++){
             map.put(inorder[i],i);
         }
-        return helper(preorder,inorder,map,0,0,inorder.length-1);
+        return binary(preorder,map,0,0,inorder.length-1);
     }
 }
