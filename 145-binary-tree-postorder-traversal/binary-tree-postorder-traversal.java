@@ -15,80 +15,45 @@
  */
 class Solution {
     public List<Integer> postorderTraversal(TreeNode root) {
-        //using one stack
-        Stack<TreeNode> s=new Stack<>();
-        List<Integer> list=new ArrayList<>();
-        if(root==null) return list;
+        List<Integer> res=new ArrayList<>();
         TreeNode curr=root;
-        while(curr!=null || !s.isEmpty() ){
-            if(curr!=null){
-                s.push(curr);
+        while(curr!=null){
+            // if(curr.left==null){
+            //     res.add(curr.val);
+            //     curr=curr.right;
+            // }
+            // else{
+            //     TreeNode leftChild=curr.left;
+            //     while(leftChild.right!=null){
+            //         leftChild=leftChild.right;
+            //     }
+            //     leftChild.right=curr;
+            //     TreeNode temp=curr;
+            //     curr=curr.left;
+            //     temp.left=null;
+            // }
+            if(curr.right==null){
+                res.add(curr.val);
                 curr=curr.left;
             }
             else{
-                TreeNode temp=s.peek().right;
-                if(temp==null){
-                    temp=s.pop();
-                    // s.pop();
-                    list.add(temp.val);
-                    while(!s.isEmpty() && temp==s.peek().right){
-                        temp=s.pop();
-                        list.add(temp.val);
-                    }
+                TreeNode rightChild=curr.right;
+                while(rightChild.left!=null && rightChild.left!=curr){
+                    rightChild=rightChild.left;
+                }
+                if(rightChild.left==null){
+                    rightChild.left=curr;
+                    res.add(curr.val);
+
+                    curr=curr.right;
                 }
                 else{
-                    curr=temp;
+                    rightChild.left=null;
+                    curr=curr.left;;
                 }
             }
         }
-        return list;
-    }
-}
-
-
-
-
-
-
-
-/*
-class Solution {
-    public List<Integer> postorderTraversal(TreeNode root) {
-        //using two stacks iterative method
-        Stack<TreeNode> s1=new Stack<>();
-        Stack<TreeNode> s2=new Stack<>();
-        List<Integer> l=new ArrayList<>();
-        if (root == null) return l;
-        s1.push(root);
-        while(!s1.isEmpty()){
-            TreeNode node=s1.pop();
-            s2.push(node);
-            if(node.left!=null) s1.push(node.left);
-            if(node.right!=null) s1.push(node.right);
-        }
-        while(!s2.isEmpty()){
-            TreeNode res=s2.pop();
-            l.add(res.val);
-        }
-        return l;
-    }
-}
-*/
-
-
-
-/*
-class Solution {
-    public void helper(TreeNode root,ArrayList<Integer> res){
-        if(root==null) return;
-        helper(root.left,res);
-        helper(root.right,res);
-        res.add(root.val);
-    }
-    public List<Integer> postorderTraversal(TreeNode root) {
-        ArrayList<Integer> res=new ArrayList<>();
-        helper(root,res);
+        Collections.reverse(res); // Reverse the list at the end
         return res;
     }
 }
-*/
