@@ -14,54 +14,45 @@
  * }
  */
 class Solution {
-    public TreeNode parent(HashMap<TreeNode,TreeNode> map,TreeNode root,int start){
-        if(root==null) return null;
-        if(root.val==start){
-            return root;
-        }
+    public TreeNode target=null;
+    public void parent(TreeNode root,HashMap<TreeNode,TreeNode> map,int start){
+        if(root==null) return;
+        if(root.val==start) target=root;
         if(root.left!=null) map.put(root.left,root);
         if(root.right!=null) map.put(root.right,root);
-        TreeNode left=parent(map,root.left,start);
-        if(left!=null) return left;
-        return parent(map,root.right,start);
+        parent(root.left,map,start);
+        parent(root.right,map,start);
+        return;
     }
     public int amountOfTime(TreeNode root, int start) {
         if(root==null) return 0;
-        //first we need to find the starting of this disast..
-        HashMap<TreeNode,TreeNode> map=new HashMap<>();
-        HashSet<TreeNode> visited=new HashSet<>();
-        TreeNode startNode=parent(map,root,start);
-        if(startNode==null) return 0;
-        Queue<TreeNode> q=new LinkedList<>();
-        q.add(startNode);
-        visited.add(startNode);
         int time=0;
+        Queue<TreeNode> q=new LinkedList<>();
+        HashSet<TreeNode> visited=new HashSet<>();
+        HashMap<TreeNode,TreeNode> map=new HashMap<>();
+        parent(root,map,start);
+        q.add(target);
         while(!q.isEmpty()){
             int size=q.size();
-            boolean infect=false;
+            boolean flag=false;
             for(int i=0;i<size;i++){
                 TreeNode curr=q.poll();
-                //checking for the parent one..
-                TreeNode parentNode=map.get(curr);
-                if(parentNode!=null && !visited.contains(parentNode)){
-                    visited.add(parentNode);
-                    infect=true;
-                    q.add(parentNode);
+                visited.add(curr);
+                if(map.containsKey(curr) && !visited.contains(map.get(curr))){
+                    q.add(map.get(curr));
+                    flag=true;
                 }
-                if(curr.left!=null && !visited.contains(curr.left)){
-                    visited.add(curr.left);
-                    infect=true;
+                if((curr.left!=null) && !visited.contains(curr.left)){
                     q.add(curr.left);
+                    flag=true;
                 }
-                if(curr.right!=null && !visited.contains(curr.right)){
-                    visited.add(curr.right);
-                    infect=true;
+                if((curr.right!=null) && !visited.contains(curr.right)){
                     q.add(curr.right);
+                    flag=true;
                 }
             }
-            if(infect){
+            if(flag)
             time++;
-            }
         }
         return time;
     }
