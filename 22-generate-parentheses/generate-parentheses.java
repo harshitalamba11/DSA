@@ -1,30 +1,18 @@
 class Solution {
-    public boolean validbrackets(String str){
-        int c=0;
-        for(int i=0;i<str.length();i++){
-            if(str.charAt(i)=='('){
-                c++;
-            }
-            else{
-                c--;
-            }
-             if (c < 0) return false;
-        }
-        return c==0;
-    }
-    public void helper(List<String> list,int n,String str){
+    public void helper(List<String> list,int n,int open,int close,String str){
         if(str.length()==n*2){
-            if(validbrackets(str)){
-            list.add(str);}
+            if(open==n && close==n)
+            list.add(str);
             return;
         }
-        helper(list,n,str+"(");
-        helper(list,n,str+")");
+        if(open<n)
+        helper(list,n,open+1,close,str+"(");
+        if(open>close)
+        helper(list,n,open,close+1,str+")");
     }
     public List<String> generateParenthesis(int n) {
         List<String> list=new ArrayList<>();
-        // StringBuilder str=new StringBuilder();
-        helper(list,n,"");
+        helper(list,n,0,0,"");
         return list;
     }
 }
