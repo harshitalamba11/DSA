@@ -19,9 +19,7 @@ class Solution {
             return;
         }
         helper(list,n,str+"(");
-        // str.deleteCharAt(str.length() - 1);
         helper(list,n,str+")");
-        // str.deleteCharAt(str.length() - 1);
     }
     public List<String> generateParenthesis(int n) {
         List<String> list=new ArrayList<>();
