@@ -17,15 +17,32 @@ class Solution {
 
 
     //method-2 ->>> bottome-up approach
-    public int rob(int[] nums) {
-        int[] dp=new int[nums.length+1];
+    // public int rob(int[] nums) {
+    //     int[] dp=new int[nums.length+1];
+    //     if(nums.length==1) return nums[0];
+    //     if(nums.length<=2) return Math.max(nums[0],nums[1]);
+    //     dp[0]=nums[0];dp[1]=Math.max(nums[0],nums[1]);
+    //     for(int i=2;i<nums.length;i++){
+    //         dp[i]=Math.max(nums[i]+dp[i-2],dp[i-1]);
+    //     }
+    //     return dp[nums.length-1];
+    // }
+
+
+    //method-3 ->>> space-complexity
+    public int rob(int[] nums){
+        int prev=nums[0];
         if(nums.length==1) return nums[0];
-        if(nums.length<=2) return Math.max(nums[0],nums[1]);
-        dp[0]=nums[0];dp[1]=Math.max(nums[0],nums[1]);
+        if(nums.length==2) return Math.max(nums[0],nums[1]);
+        int next=Math.max(nums[0],nums[1]);
+        int curr=0;
+    
         for(int i=2;i<nums.length;i++){
-            dp[i]=Math.max(nums[i]+dp[i-2],dp[i-1]);
+            curr=Math.max(nums[i]+prev,next);
+            prev=next;
+            next=curr;
         }
-        return dp[nums.length-1];
+        return curr;
     }
     
 }
