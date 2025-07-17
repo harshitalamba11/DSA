@@ -15,7 +15,7 @@ class Solution {
             if(a[1]==b[1]) return a[2]-b[2];
             return a[1]-b[1];
         });
-        int timer=0;
+        int timer=list[0][0];
         int i=0;
         int idx=0;
         while(!pq.isEmpty() || i<list.length){
