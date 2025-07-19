@@ -7,12 +7,12 @@ class Solution {
         int min = Integer.MAX_VALUE;
 
         for (int i = 1; i <= nums[idx]; i++) {
-            int next = idx + i;
-            if (next < n) {
-                int res = recur(nums, n, next, dp);
+            // int next = idx + i;
+            // if (next < n) {
+                int res = recur(nums, n, idx + i, dp);
                 if (res != Integer.MAX_VALUE)
                     min = Math.min(min, res + 1);
-            }
+            // }
         }
 
         return dp[idx] = min;
