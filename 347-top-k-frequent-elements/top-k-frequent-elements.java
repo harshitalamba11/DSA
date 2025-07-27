@@ -11,9 +11,12 @@ class Solution {
         for(int i=0;i<nums.length;i++){
             map.put(nums[i],map.getOrDefault(nums[i],0)+1);
         }
-        PriorityQueue<Tuple> pq=new PriorityQueue<>((a,b)->b.next-a.next);
+        PriorityQueue<Tuple> pq=new PriorityQueue<>((a,b)->a.next-b.next);
         for(int ele:map.keySet()){
             pq.add(new Tuple(ele,map.get(ele)));
+            if(pq.size()>k){
+                pq.poll();
+            }
         }
         int[] res=new int[k];
         for(int i=0;i<k;i++){
