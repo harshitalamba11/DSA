@@ -18,9 +18,9 @@ class Solution {
 
         //method-3
         int[][] dp=new int[prices.length+1][2];
-        return recur(prices,0,1,dp);
+        return recur(prices,dp);
     }
-    public int recur(int[] prices,int idx,int buy,int[][] dp){
+    public int recur(int[] prices,int[][] dp){
         for(int i=prices.length-1;i>=0;i--){
             for(int j=0;j<=1;j++){
                 if(j==1){
