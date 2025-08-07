@@ -19,6 +19,6 @@ class Solution {
         else if(p.charAt(j)=='*'){
             return dp[i][j]=(j<p.length() && recur(s,p,i,j+1,dp) || (i<s.length() && recur(s,p,i+1,j,dp)));
         }
-        return false;
+        return dp[i][j]=false;
     }
 }
