@@ -12,23 +12,30 @@ class Solution {
 
 
         //method-2
-        Integer[][] dp=new Integer[prices.length+1][2];
-        return recur(prices,0,1,dp);   //1 for buy 0 for sell
+        // Integer[][] dp=new Integer[prices.length+1][2];
+        // return recur(prices,0,1,dp);   //1 for buy 0 for sell
+
+
+        //method-3
+        int[][] dp=new int[prices.length+1][2];
+        return recur(prices,0,1,dp);
     }
-    public int recur(int[] prices,int idx,int buy,Integer[][] dp){
-        if(idx==prices.length) return 0;
-        if(dp[idx][buy]!=null) return dp[idx][buy];
-        int profit=0;
-        if(buy==1){
-            int will_buy=-prices[idx]+recur(prices,idx+1,0,dp);
-            int will_not_buy=0+recur(prices,idx+1,1,dp);
-            profit=Math.max(will_buy,will_not_buy);
+    public int recur(int[] prices,int idx,int buy,int[][] dp){
+        for(int i=prices.length-1;i>=0;i--){
+            for(int j=0;j<=1;j++){
+                if(j==1){
+                    int will_buy=-prices[i]+dp[i+1][0];
+                    int will_not_buy=0+dp[i+1][1];
+                    dp[i][j]=Math.max(will_buy,will_not_buy);
+                }
+                else{
+                    int will_sell=prices[i]+dp[i+1][1];
+                    int will_not_sell=0+dp[i+1][0];
+                    dp[i][j]=Math.max(will_sell,will_not_sell);
+                }
+            }        
         }
-        else{
-            int will_sell=prices[idx]+recur(prices,idx+1,1,dp);
-            int will_not_sell=0+recur(prices,idx+1,0,dp);
-            profit=Math.max(will_sell,will_not_sell);
-        }
-        return dp[idx][buy]=profit;
+        
+        return dp[0][1];
     }
 }
