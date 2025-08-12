@@ -10,9 +10,7 @@ class Solution {
                 dp[i][j]=Math.max(will_buy,will_not_buy);
             }
             else{
-                int will_sell=prices[i]-fee;
-                if(i+2<prices.length)
-                will_sell+=dp[i+1][0];
+                int will_sell=prices[i]+dp[i+1][0]-fee;
                 int will_notsell=0+dp[i+1][1];
                 dp[i][j]=Math.max(will_sell,will_notsell);
             }
