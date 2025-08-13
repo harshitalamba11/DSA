@@ -1,5 +1,27 @@
 class Solution {
     public int lengthOfLIS(int[] nums) {
+        int[] dp=new int[nums.length];
+        Arrays.fill(dp,1);
+        for(int i=0;i<nums.length;i++){
+            for(int j=0;j<i;j++){
+                if(nums[i]>nums[j]){
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+        int max=0;
+        for(int i=0;i<dp.length;i++){
+            max=Math.max(max,dp[i]);
+        }
+        return max;
+    }
+}
+
+
+
+/*
+class Solution {
+    public int lengthOfLIS(int[] nums) {
         Stack<Integer> st=new Stack<>();
         return recur(nums,-1,0,new Integer[nums.length][nums.length+1]);
     }
@@ -15,3 +37,4 @@ class Solution {
         return dp[idx][prev+1]=Math.max(take,not_take);
     }
 }
+*/
