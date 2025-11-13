@@ -9,8 +9,6 @@ class Solution {
             indeg[prerequisites[i][0]]++;
         }
         int[] res=new int[numCourses];
-        //make the map with the parameter of indegree to use further , can make the list also
-        // so that is why indeg used
 
         //now add the 0 indeg wale num in q
         for(int i=0;i<indeg.length;i++){
@@ -19,7 +17,6 @@ class Solution {
 
         //now start the algo
         int count=0;
-        int flag=0;
         while(!q.isEmpty()){
             int curr=q.poll();
             res[count]=curr;
