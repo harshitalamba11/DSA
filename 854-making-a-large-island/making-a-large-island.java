@@ -1,102 +1,92 @@
 class Solution {
-
-    public int find(int x, int[] parent) {
-        if (x == parent[x]) return x;
-        return parent[x] = find(parent[x], parent);
+    public int[][] dirs={{1,0},{-1,0},{0,1},{0,-1}};
+    public int find(int x,int[] parent){
+        if(x==parent[x]) return x;
+        return parent[x]=find(parent[x],parent);    //path compression
     }
-
-    public void union(int x, int y, int[] parent, int[] rank) {
-        int px = find(x, parent);
-        int py = find(y, parent);
-
-        if (px == py) return;
-
-        if (rank[px] > rank[py]) {
-            parent[py] = px;
-        } else if (rank[px] < rank[py]) {
-            parent[px] = py;
-        } else {
-            parent[px] = py;
-            rank[py]++;
+    public void union(int x,int y,int[] parent,int[] rank){
+        int p_x=find(x,parent);
+        int p_y=find(y,parent);
+        if(p_x==p_y) return;
+        if(rank[p_x]>rank[p_y]){
+            parent[p_y]=p_x;
+        }
+        else if(rank[p_x]<rank[p_y]){
+            parent[p_x]=p_y;
+        }
+        else{
+            parent[p_x]=p_y;
+            rank[p_y]++;
         }
     }
-
-    boolean isValid(int r, int c, int n) {
-        return r >= 0 && c >= 0 && r < n && c < n;
+    public boolean isValid(int row,int col,int n){
+        return row>=0 && row<n && col>=0 && col<n;
     }
-
     public int largestIsland(int[][] grid) {
-
-        int n = grid.length;
-        int total = n * n;
-
-        int[] parent = new int[total];
-        int[] rank = new int[total];
-
-        for (int i = 0; i < total; i++)
-            parent[i] = i;
-
-        int[] dr = {-1, 0, 1, 0};
-        int[] dc = {0, -1, 0, 1};
-
-        // Step 1: DSU union for all 1s
-        for (int r = 0; r < n; r++) {
-            for (int c = 0; c < n; c++) {
-                if (grid[r][c] == 0) continue;
-
-                int node = r * n + c;
-
-                for (int k = 0; k < 4; k++) {
-                    int nr = r + dr[k];
-                    int nc = c + dc[k];
-
-                    if (isValid(nr, nc, n) && grid[nr][nc] == 1) {
-                        int adj = nr * n + nc;
-                        union(node, adj, parent, rank);
-                    }
-                }
-            }
-        }
-
-        // Step 2: Calculate size of each parent component
-        Map<Integer, Integer> compSize = new HashMap<>();
-
-        for (int i = 0; i < total; i++) {
-            int p = find(i, parent);
-            compSize.put(p, compSize.getOrDefault(p, 0) + 1);
-        }
-
-        int maxIsland = 0;
-
-        // existing largest
-        for (int size : compSize.values())
-            maxIsland = Math.max(maxIsland, size);
-
-        // Step 3: Try flipping 0 → 1
-        for (int r = 0; r < n; r++) {
-            for (int c = 0; c < n; c++) {
-
-                if (grid[r][c] == 1) continue;
-
-                Set<Integer> seen = new HashSet<>();
-                int newSize = 1; // cell itself
-
-                for (int k = 0; k < 4; k++) {
-                    int nr = r + dr[k];
-                    int nc = c + dc[k];
-
-                    if (isValid(nr, nc, n) && grid[nr][nc] == 1) {
-                        int parentComp = find(nr * n + nc, parent);
-                        if (seen.add(parentComp)) {
-                            newSize += compSize.get(parentComp);
+        int n=grid.length;
+        int[] rank=new int[n*n];
+        int[] parent=new int[n*n];
+        for(int i=0;i<n*n;i++) parent[i]=i;
+        //step-1
+        // making the union
+        for(int row=0;row<n;row++){
+            for(int col=0;col<n;col++){
+                if(grid[row][col]==1){
+                    for(int i=0;i<4;i++){
+                        int newr=row+dirs[i][0];
+                        int newc=col+dirs[i][1];
+                        if(isValid(newr,newc,n) && grid[newr][newc]==1){
+                            int adj1=row*n+col;
+                            int adj2=newr*n+newc;
+                            union(adj1,adj2,parent,rank);
                         }
                     }
                 }
-
-                maxIsland = Math.max(maxIsland, newSize);
             }
         }
 
-        return maxIsland;
+
+        //step-2
+        // setting the hashmap
+        Map<Integer,Integer> map=new HashMap<>();
+        for(int i=0;i<n*n;i++){
+            int p=find(i,parent);
+            map.put(p,map.getOrDefault(p,0)+1);
+        }
+
+
+        //step-3
+        // exactly storing the min higest which can be highest
+        int maxres=0;
+        for(int val:map.values()){
+            maxres=Math.max(maxres,val);
+        }
+
+
+        //step-4 
+        // last step trying to flip the 0 to 1
+        int max=1;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                
+                if(grid[i][j]==1) continue;
+                Set<Integer> s=new HashSet<>();
+                max=1;
+                if(isValid(i,j,n) && grid[i][j]==0){
+                    for(int k=0;k<4;k++){
+                        int r=i+dirs[k][0];
+                        int c=j+dirs[k][1];
+                        if(isValid(r,c,n) && grid[r][c]==1){
+                            int p=find(r*n+c,parent);
+                            if(s.add(p)){
+                                max+=map.get(p);
+                            }
+                        }
+                    }
+                }
+                maxres=Math.max(max,maxres);
+            }
+        }
+        return maxres;
     }
 }
