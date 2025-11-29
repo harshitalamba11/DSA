@@ -1,7 +1,7 @@
 class Solution {
     public int fib(int n) {
         int[] dp=new int[n+1];
-        //using recur simple because understanding dp
+        //using recur simple because understanding dp-> top-down
         return recur(n,dp);
     }
     public int recur(int n,int[] dp){
