@@ -1,21 +1,14 @@
 class Solution {
-    
-    public int recur(int[] nums,int n,int[] dp){
-        // if(dp[idx]!=-1) return dp[idx];
-        for(int i=2;i<=n;i++){
-            int not_steal=dp[i-1];
-            int steal=0;
-            if(i>1)
-            steal=dp[i-2]+nums[i-1];
-            dp[i]=Math.max(steal,not_steal);
-        }
-        return dp[n];
-    }
     public int rob(int[] nums) {
-        int n=nums.length;
-        int[] dp=new int[n+1];
-        dp[0]=0;
-        dp[1]=nums[0];
-        return recur(nums,n,dp);
+        int[] dp=new int[nums.length+1];
+        Arrays.fill(dp,-1);
+        return recur(nums,nums.length,dp,0);
+    }
+    public int recur(int[] nums,int n,int[] dp,int idx){
+        if(idx>=n) return 0;
+        if(dp[idx]!=-1) return dp[idx];
+        int steal=nums[idx]+recur(nums,n,dp,idx+2);
+        int not_steal=recur(nums,n,dp,idx+1);
+        return dp[idx]=Math.max(steal,not_steal);
     }
 }
