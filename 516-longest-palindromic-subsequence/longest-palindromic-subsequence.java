@@ -1,47 +1,21 @@
 class Solution {
     public int longestPalindromeSubseq(String s) {
-        //with space 0(n)
-        String s1=s;
-        StringBuilder s2=new StringBuilder(s);
-        s2.reverse();
-        int[] prev=new int[s1.length()+1];
-        int[] curr=new int[s2.length()+1];
-        for(int i=1;i<=s1.length();i++){
-            
-            for(int j=1;j<=s2.length();j++){
-                if(s1.charAt(i-1)==s2.charAt(j-1)){
-                    curr[j]=1+prev[j-1];
-                }
-                else{
-                    curr[j]=Math.max(prev[j],curr[j-1]);
-                }
-            }
-            int[] temp=prev;
-            prev=curr;
-            curr=temp;
+        if(s.length()<=1)return 1;
+        int i=0;
+        int j=s.length()-1;
+        int[][] dp=new int[s.length()+1][s.length()+1];
+        for(int i1=0;i1<s.length()+1;i1++) Arrays.fill(dp[i1],-1);
+        return recur(s,i,j,dp);
+    }
+    public int recur(String s, int i,int j,int[][] dp){
+        if(i>j)return 0;
+        if(i==j) return 1;
+        if(dp[i][j]!=-1)return dp[i][j];
+        if(s.charAt(i)==s.charAt(j)){
+            return dp[i][j]=2+recur(s,i+1,j-1,dp);
         }
-        return prev[s1.length()];
+        int a=recur(s,i+1,j,dp);
+        int b=recur(s,i,j-1,dp);
+        return dp[i][j]=Math.max(a,b);
     }
 }
-
-
-/*
-class Solution {
-    public int longestPalindromeSubseq(String s) {
-        String s1=s;
-        StringBuilder s2=new StringBuilder(s);
-        s2.reverse();
-        int[][] dp=new int[s1.length()+1][s2.length()+1];
-        for(int i=1;i<=s1.length();i++){
-            for(int j=1;j<=s2.length();j++){
-                if(s1.charAt(i-1)==s2.charAt(j-1)){
-                    dp[i][j]=1+dp[i-1][j-1];
-                }
-                else{
-                    dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
-                }
-            }
-        }
-        return dp[s1.length()][s2.length()];
-    }
-}*/
