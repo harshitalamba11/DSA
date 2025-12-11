@@ -1,38 +1,29 @@
 class Solution {
-    public int recur(int[] prices,int[][][] dp){
-        for (int i = prices.length-1; i >= 0; i--) {
-        for (int j = 0; j <= 1; j++) {
-            for (int k = 1; k <= 2; k++) { // k=0 means no transactions left
-                if (j == 0) { // can buy
-                    int will_buy = -prices[i] + dp[i+1][1][k]; 
-                    int will_notbuy = dp[i+1][0][k];
-                    dp[i][j][k] = Math.max(will_buy, will_notbuy);
-                } else { // can sell
-                    int will_sell = prices[i] + dp[i+1][0][k-1]; // reduce transaction after sell
-                    int will_notsell = dp[i+1][1][k];
-                    dp[i][j][k] = Math.max(will_sell, will_notsell);
-                }
+    public int maxProfit(int[] prices) {
+        int[][][] dp=new int[prices.length+1][3][3];
+        for(int i=0;i<prices.length+1;i++){
+            for(int j=0;j<3;j++){
+                // for(int k=0;k<3;k++)
+                Arrays.fill(dp[i][j],-1);
             }
         }
+        return recur(prices,0,2,0,dp);
     }
-    return dp[0][0][2];
-    }
-    public int maxProfit(int[] prices) {
-        // int[][][] dp=new int[prices.length+1][2][3];
-        // return recur(prices,dp);
-
-
-        //method-2
-        //four variables
-        int profit1=0,profit2=0;
-        int min_1=Integer.MAX_VALUE;
-        int min_2=Integer.MAX_VALUE;
-        for(int i=0;i<prices.length;i++){
-            min_1=Math.min(min_1,prices[i]);
-            profit1=Math.max(profit1,prices[i]-min_1);
-            min_2=Math.min(min_2,prices[i]-profit1);
-            profit2=Math.max(profit2,prices[i]-min_2);
+    public int recur(int[] prices,int idx,int count,int state,int[][][] dp){
+        if(idx>=prices.length) return 0;
+        if(count==0) return 0;
+        if(dp[idx][state][count]!=-1) return dp[idx][state][count];
+        int cost=0;
+        if(state==0){
+            int will_buy=-prices[idx]+recur(prices,idx+1,count,1,dp);
+            int will_not_buy=recur(prices,idx+1,count,0,dp);
+            cost=Math.max(will_buy,will_not_buy);
         }
-        return profit2;
+        else{
+            int will_sell=prices[idx]+recur(prices,idx+1,count-1,0,dp);
+            int will_not_sell=recur(prices,idx+1,count,1,dp);
+            cost=Math.max(will_sell,will_not_sell);
+        }
+        return dp[idx][state][count]=cost;
     }
 }
