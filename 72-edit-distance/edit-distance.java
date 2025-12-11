@@ -1,20 +1,31 @@
 class Solution {
-    public int recur(String word1,String word2,int i,int j,Integer[][] dp){
-        if(j==word2.length()) return word1.length()-i;
-        if(i==word1.length()) return word2.length()-j;
-        if(dp[i][j]!=null) return dp[i][j];
-        if(word1.charAt(i)==word2.charAt(j)){
-            return dp[i][j]=recur(word1,word2,i+1,j+1,dp);
-        }
-        else{
-            int insert=recur(word1,word2,i,j+1,dp);
-            int delete=recur(word1,word2,i+1,j,dp);
-            int replace=recur(word1,word2,i+1,j+1,dp);
-            return dp[i][j]=1+Math.min(delete,Math.min(insert,replace));
-        }
-    }
     public int minDistance(String word1, String word2) {
-        Integer[][] dp=new Integer[word1.length()+1][word2.length()+1];
-        return recur(word1,word2,0,0,dp);
+        int m = word1.length();
+        int n = word2.length();
+
+        int[][] dp = new int[m + 1][n + 1];
+
+        // Base cases
+        for (int i = 0; i <= m; i++) dp[i][0] = i;  // delete all i chars
+        for (int j = 0; j <= n; j++) dp[0][j] = j;  // insert all j chars
+
+        // Fill DP table
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];        // no operation
+                } else {
+                    int insertOp = dp[i][j - 1] + 1;     // insert
+                    int deleteOp = dp[i - 1][j] + 1;     // delete
+                    int replaceOp = dp[i - 1][j - 1] + 1; // replace
+
+                    dp[i][j] = Math.min(insertOp,
+                                 Math.min(deleteOp, replaceOp));
+                }
+            }
+        }
+
+        return dp[m][n];
     }
 }
